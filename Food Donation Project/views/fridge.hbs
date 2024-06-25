@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Fridge Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            background-color: rgb(255, 255, 255);
+            max-width: 800px;
+            height: 540px;
+            gap: 20px;
+            position: relative;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(rgba(255, 255, 255, 0.521), rgb(255, 255, 255)),url('./icons/bgCutout.png');
+            background-repeat: no-repeat;
+            background-size: 110%;
+            background-position: -20px 450px;
+            overflow: hidden;
+           
+        }
+        #doodleBG{
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 100%;
+            height:100%;
+            z-index: -1;
+            background-image: url("./icons/dood2.png");
+            background-size: 70%;
+            opacity: 6%;
+
+        }
+        .card {
+            flex: 1;
+            /* background-color: #ffffff; */
+            border-radius: 8px;
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+         
+        }
+        .button, .button2 {
+            font-size: 15px;
+            font-weight: 600;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 140px;
+            height: 100px;
+        }
+
+        .optionMenu {
+            width: 100%;
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+        }
+        .counter-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            font-size: 25px;
+        }
+        .button:hover, .counter-button:hover {
+            background-color: #218838;
+        }
+        .getFoodBtn{
+            font-size: 15px;
+            font-weight: 600;
+            background-color: #28a745;
+            color: white;
+            /* padding: 10px 20px; */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 140px;
+           position: relative;
+           left:0px;
+        }
+        #getFoodBtn{
+            font-size: 15px;
+            font-weight: 600;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 140px;
+        }
+        #food-need-count {
+            font-size: 60px;
+        }
+        .hidden {
+            display: none;
+        }
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -10px;
+        }
+        .input-group label {
+            margin-right: 10px;
+        }
+        .counter {
+            display: flex;
+            align-items: center;
+        }
+        .counter span {
+            margin: 0 10px;
+            font-size: 20px;
+        }
+        #title {
+            margin-bottom: 0px;
+            margin-top: 50px;
+
+        }
+        #subTitle {
+            margin-top: 5px;
+            font-weight: 400;
+            word-spacing: 0px;
+            font-size: 12px;
+            /* margin-bottom: 60px; */
+        }
+        .btn {
+            height: 40px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #28a745;
+            background-color: rgba(255, 255, 255, 0);
+            position: absolute;
+            right:  31px;
+            top: 10px;
+        }
+        #toggle {
+            position: absolute;
+            left: 20px;
+            top: 6px;
+            display: flex;
+            align-items: center;
+        }
+        #toggle h6 {
+            /* margin-top: 5px; */
+            font-weight: 600;
+            font-size: 8px;
+            margin-left: 5px;
+            position: relative;
+            left: -60px;
+            top:20px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            transform: scale(0.6);
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .slider.round {
+            border-radius: 34px;
+        }
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        #showCard {
+            width: 90%;
+          
+            max-width: 450px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 500px rgba(0, 0, 0, 0.5);
+            margin-top: 100px;
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            position: absolute;
+            /* left:0px; */
+        }
+        #showCard button{
+            height: 40px;
+            margin-left: 28%;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        }
+        .close-btn:hover {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="doodleBG"></div>
+        <div class="card">
+            <nav>
+                <div id="toggle">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <h6>தமிழ் - ENG</h6>
+                </div>
+                <button class="btn" onclick="showLoadFood()">Load Food <span style="font-size: 25px; position: absolute; top: 3px;">&#11166;</span></button>
+            </nav>
+            <h1 id="title">COMMUNITY FRIDGE</h1>
+            <h4 id="subTitle">From our community, for our community</h4>
+            <h2>Enter Food Need Count</h2>
+            <div class="input-group">
+                <div class="counter">
+                    <button class="counter-button" onclick="decrementCount()">-</button>
+                    <span id="food-need-count">1</span>
+                    <button class="counter-button" onclick="incrementCount()">+</button>
+                </div>
+            </div>
+            <button onclick="getFood()" id="getFoodBtn">Get Food</button>
+            <div class="optionMenu">
+                <button class="button2" onclick="showCheckFood()"><img src="./icons/Food_Search.png" style="height: 80%; transform: scale(0.7);margin-top: -10px;"><label>Food Details</label> </button>
+                <button class="button2" onclick="showRequestFood()"><img src="./icons/request.png" style="height: 80%; transform: scale(0.7);margin-top: -10px;"><label>Request Food</label></button>
+            </div>
+        </div>
+
+        <div id="showCard">
+            <span class="close-btn" onclick="closeCard()" style="color:red">x</span>
+            <div id="check-food-section" class="hidden">
+                <div class="input-group">
+                    <label for="food-id-check">Enter Food ID:</label>
+                    <input type="text" id="food-id-check">
+                </div>
+                <button class="button" onclick="checkFoodDetails()">Check</button>
+                <div >
+                    <h3>Food Details</h3>
+                    <table id="food-details-table">
+        <tbody>
+            {{#each rows}}
+    <div>
+        <h2>Food Name: {{this.food_name}}</h2>
+        <p>Cooked Timing: {{this.cooked_timing}}</p>
+        <p>Expiry Timing: {{this.expiry_timing}}</p>
+    </div>
+    {{/each}}
+        </tbody>
+    </table>
+                   
+
+                </div>
+            </div>
+            <div id="request-food-section" class="hidden">
+                <div class="input-group">
+                   <p style="text-align:justify ;">Food Request Instructions<br><br>
+                     Ensure the fridge is empty or lacks the necessary items before requesting food.
+                   <br><br>
+                    
+                    Click the "Request Food" button to notify our volunteers.
+                    <br><br>
+                    
+                    A volunteer will be alerted and will restock the fridge as soon as possible.
+                    <br><br>
+                    
+                    Please return to the fridge after some time to see if it has been restocked.</p>
+                </div>
+                <button class="button" onclick="requestFood()">Request</button>
+            </div>
+            <div id="load-food-section" class="hidden">
+                <H6>Note: Please SELECT Individual option if you are directly donating food without MEALY APP</H6>
+                <button class="getFoodBtn" id="individualLoadBtn" onclick="showIndividualLoad()">Individual</button>
+                <button class="getFoodBtn" id="volunteerLoadBtn" onclick="showVolunteerLoad()">Volunteer</button>
+                <div id="individual-load-section" class="hidden">
+                    <div class="input-group">
+                        <label for="food-name">Food Name:</label>
+                        <input type="text" id="food-name" name="foodName">
+                    </div>
+                    <div class="input-group">
+                        <label for="cooked-timing">Cooked Timing:</label>
+                        <input type="text" id="cooked-timing" name="cookedTiming">
+                    </div>
+                    <div class="input-group">
+                        <label for="expiry-timing">Expiry Timing:</label>
+                        <input type="text" id="expiry-timing" name="expiryTiming">
+                    </div>
+                    <button class="button" onclick="loadIndividualFood()">Load</button>
+                </div>
+                
+                <div id="volunteer-load-section">
+                    <div class="input-group">
+                        <label for="food-id-load">Enter Food ID:</label>
+                        <input type="text" id="food-id-load">
+                    </div>
+                    <button class="button" onclick="loadFoodDetails()">Load Food</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showCheckFood() {
+            document.getElementById('showCard').style.display = 'flex';
+            document.getElementById('check-food-section').style.display = 'block';
+            document.getElementById('request-food-section').style.display = 'none';
+            document.getElementById('load-food-section').style.display = 'none';
+        }
+
+        function showRequestFood() {
+            document.getElementById('showCard').style.display = 'flex';
+            document.getElementById('request-food-section').style.display = 'block';
+            document.getElementById('check-food-section').style.display = 'none';            
+            document.getElementById('load-food-section').style.display = 'none';
+        }
+
+        function showLoadFood() {
+            document.getElementById('showCard').style.display = 'flex';
+            document.getElementById('load-food-section').style.display = 'block';
+            document.getElementById('request-food-section').style.display = 'none';
+            document.getElementById('check-food-section').style.display = 'none';
+            document.getElementById('individual-load-section').style.display = 'none';
+            document.getElementById('volunteer-load-section').style.display = 'none';
+            document.getElementById('individualLoadBtn').style.display = 'block';
+            document.getElementById('volunteerLoadBtn').style.display = 'block';
+        }
+
+        function showIndividualLoad() {
+            document.getElementById('individual-load-section').style.display = 'block';
+            document.getElementById('volunteer-load-section').style.display = 'none';
+            document.getElementById('individualLoadBtn').style.display = 'none';
+            document.getElementById('volunteerLoadBtn').style.display = 'none';
+        }
+
+        function showVolunteerLoad() {
+            document.getElementById('volunteer-load-section').style.display = 'block';
+            document.getElementById('individual-load-section').style.display = 'none';
+            document.getElementById('individualLoadBtn').style.display = 'none';
+            document.getElementById('volunteerLoadBtn').style.display = 'none';
+        }
+
+        function closeCard() {
+            document.getElementById('showCard').style.display = 'none';
+        }
+
+        function loadIndividualFood() {
+    const foodName = document.getElementById('food-name').value;
+    const cookedTiming = document.getElementById('cooked-timing').value;
+    const expiryTiming = document.getElementById('expiry-timing').value;
+
+    const foodData = {
+        foodName: foodName,
+        cookedTiming: cookedTiming,
+        expiryTiming: expiryTiming
+    };
+
+    fetch('/load-food', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(foodData)
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // Display success message
+        closeCard(); // Close the card/modal
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+        function checkFoodDetails() {
+            // Your existing checkFoodDetails logic
+        }
+
+        function requestFood() {
+            // Your existing requestFood logic
+        }
+
+        function getFood() {
+            alert(`Getting ${foodCount} units of food.`);
+        }
+let foodCount=1;
+        function incrementCount() {
+
+            foodCount++;
+            document.getElementById('food-need-count').textContent = foodCount;
+            
+        }
+
+        function decrementCount() {
+            if (foodCount > 1) {
+                foodCount--;
+                document.getElementById('food-need-count').textContent = foodCount;
+            }
+        }
+function showCheckFood() {
+        document.getElementById('showCard').style.display = 'flex';
+        document.getElementById('check-food-section').style.display = 'block';
+        document.getElementById('request-food-section').style.display = 'none';
+        document.getElementById('load-food-section').style.display = 'none';
+
+        fetchFoodDetails(); // Fetch food details when this section is shown
+    }
+
+    function checkFoodDetails() {
+            const foodId = document.getElementById('food-id-check').value;
+
+            fetch(`/food-details/${foodId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Food item not found');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderFoodDetails(data); // Render the fetched data
+                })
+                .catch(error => {
+                    console.error('Error fetching food details:', error);
+                    alert('Food item not found');
+                });
+        }
+
+        function renderFoodDetails(food) {
+            const foodDetailsContainer = document.getElementById('food-details-table');
+            foodDetailsContainer.innerHTML = `
+                <h2>Food Name: ${food.food_name}</h2>
+                <p>Cooked Timing: ${food.cooked_timing}</p>
+                <p>Expiry Timing: ${food.expiry_timing}</p>
+            `;
+        }
+
+    </script>
+</body>
+</html>
+
+ 
